@@ -26,11 +26,58 @@ def ga():
         
 #trier le code genetic
 
-def fitness(List): #écart à 0
+listgen=[1,2,3,4,5,6,7,8,9]
+def crossover_individuals(a,b): # melanger le code génétique sans qu'il y ait de répetitions et sans 
+    n=a.getLen()
+
+    if a.gen_code[n//2]>b.gen_code[n//2]:
+        a,b=b,a
+        
+    child = Individual([])
+       
+    split = n//2
+    child.gen_code = a.gen_code[0:split] + b.gen_code[split:n]
+   # population.ListOfIndividuals.append(child)
+    
+ 
+def randomgene(a):
+    L=[]
+    for x in listgen:
+        if x not in a.gen_code:
+            L.append(x)
+    return random.choice(L)
+    
+    
+
+def mutate(a):
+    if random.uniform(0.0,1.0)<=0.2:
+        a.gen_code[random.randint(1,len(a.gen_code))-1]=randomgene(a)
+        a.gen_code=sorted(a.gen_code)
+    print(a.gen_code)
+    
+    
+    
+        
+ 
+    
+    
+    
+    
+    
+
+def fitness(List): #écart à 0 
     for individual in   List:
         individual.fitness=sum(individual.gen_code)
         
 
 def select_individuals(list):
-    list = sorted(list, key=lambda list: list.fitness, reverse=True) #trier les 
+    list = sorted(list, key=lambda list: list.fitness, reverse=True) #trier les individuals
     
+    
+a=Individual([1,2,3,4]) # test 
+b=Individual([5,6,7,8])    
+crossover_individuals(a,b)
+random.choice(listgen)
+randomgene(a)
+mutate(a)
+
