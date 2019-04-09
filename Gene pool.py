@@ -1,20 +1,28 @@
+import random
+
 class Individual:
-    def __init__(self,gen_code,fitness):
-        self.gen_code=gen_code
-        self.fitness=
-        self.len=len
-        
+    def __init__(self,nbinit):
+        self.gen_code=[random.randrange(-100, 100) for i in range(nbinit)]
+        self.fitness=-1
+        self.length=len(self.gen_code)
+
     def getFitness(self):
-        return self.sum
-        
-        
-        
-        
-        
-        
+        return self.fitness
+
+    def getLen(self):
+        return self.length
+
+
 class Population:
-    def __init__(self,ListOfIndividuals):
-        self.ListOfIndividuals=ListOfIndividuals
+    def __init__(self,nb_of_people):
+        self.ListOfIndividuals = [Individual(10) for _ in range(nb_of_people)]
+        
+#C'est mon test
+def ga():
+    population = Population(100)
+    for individual in population.ListOfIndividuals:
+        print(individual.gen_code)
+        print("\n")
         
 #trier le code genetic
 
