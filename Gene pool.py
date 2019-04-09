@@ -1,8 +1,21 @@
 import random
 
+def tab_int(nom_fichier):
+    fichier = open(nom_fichier, "r")
+    a=fichier.readline()
+    nb_of_int=int(a)
+    contenu = fichier.readlines()
+    fichier.close()
+    tab=contenu[0].split(", ")
+    for i in range(len(tab)):
+        tab[i]=int(tab[i])
+    return (nb_of_int,tab)
+
+(nb_of_int, tabdata)=tab_int("small.txt")
+
 class Individual:
-    def __init__(self,nbinit):
-        self.gen_code=[random.randrange(-100, 100) for i in range(nbinit)]
+    def __init__(self, nb_init):
+        self.gen_code=random.sample(tabdata, nb_init)
         self.fitness=-1
         self.length=len(self.gen_code)
 
@@ -15,14 +28,18 @@ class Individual:
 
 class Population:
     def __init__(self,nb_of_people):
-        self.ListOfIndividuals = [Individual(10) for _ in range(nb_of_people)]
-        
+        self.ListOfIndividuals = [Individual(4) for _ in range(nb_of_people)]
+
+
+
 #C'est mon test
 def ga():
     population = Population(100)
     for individual in population.ListOfIndividuals:
         print(individual.gen_code)
         print("\n")
+
+ga()
         
 #trier le code genetic
 
