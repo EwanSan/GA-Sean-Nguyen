@@ -1,7 +1,22 @@
 import random
+
+
+def tab_int(nom_fichier):
+    fichier = open(nom_fichier, "r")
+    a=fichier.readline()
+    nb_of_int=int(a)
+    contenu = fichier.readlines()
+    fichier.close()
+    tab=contenu[0].split(", ")
+    for i in range(len(tab)):
+        tab[i]=int(tab[i])
+    return (nb_of_int,tab)
+
+(nb_of_int, tabdata)=tab_int("small.txt")
+
 class Individual:
     def __init__(self, nb_init):
-        self.gen_code=random.sample([7,3,2,-5,8], nb_init)
+        self.gen_code=random.sample(tabdata, nb_init)
         self.fitness=-1
         self.length=len(self.gen_code)
 
@@ -13,13 +28,13 @@ class Individual:
 
 
 class Population:
-    def __init__(self,nb_of_people):
-        self.ListOfIndividuals = [Individual(3) for _ in range(nb_of_people)]
+    def __init__(self,nb_of_people,nb_int):
+        self.ListOfIndividuals = [Individual(nb_int) for i in range(nb_of_people)]
 
 
 #trier le code genetic
 
-listgen= [7,3,2,-5,8]
+listgen= tabdata
 def crossover_individuals(list): # melanger le code génétique sans qu'il y ait de répetitions et sans 
     offsprings=[]
     for i in range(80):
@@ -62,7 +77,7 @@ def mutate(list):
     
     
         
- 
+    return list
     
     
     
@@ -87,23 +102,26 @@ def select_individuals(list):
 
 def ga():
     best_sol=0
-    population = Population(100)
-    print(population.ListOfIndividuals)
-    for gen in range(1000):
-        print( 'Generation: ' + str(gen))
+    for n in range(2,nb_of_int)
+        population = Population(100,2)
+        print(population.ListOfIndividuals)
+        for gen in range(1000):
+            print( 'Generation: ' + str(gen))
 
-        population.ListOfIndividuals = fitness(population.ListOfIndividuals)
+            population.ListOfIndividuals = fitness(population.ListOfIndividuals)
         
-        population.ListOfIndividuals = select_individuals(population.ListOfIndividuals)
+            population.ListOfIndividuals = select_individuals(population.ListOfIndividuals)
         
-        population.ListOfIndividuals= crossover_individuals(population.ListOfIndividuals)
-        population.ListOfIndividuals = mutate(population.ListOfIndividuals)
-        for individual in population.ListOfIndividuals:
-            if individual.fitness==0:
-                best_sol=individual.gen_code
+            population.ListOfIndividuals= crossover_individuals(population.ListOfIndividuals)
+            population.ListOfIndividuals = mutate(population.ListOfIndividuals)
+
+            for individual in population.ListOfIndividuals:
+                print(individual.gen
+                if individual.fitness==0:
+                    best_sol=individual.gen_code
         
-        
-    return gen_code
+    print(best_sol)
+    return best_sol
     
 
 
