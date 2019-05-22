@@ -2,6 +2,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def tab_int(nom_fichier):
     fichier = open(nom_fichier, "r")
     a=fichier.readline()
@@ -13,13 +14,7 @@ def tab_int(nom_fichier):
         tab[i]=int(tab[i])
     return (nb_of_int,tab)
 
-(nb_of_int, tabdata)=tab_int("medium.txt")
-
-# tabdata=[5, -2, -3, 7, 4,10,-10,1]
-# nb_of_int=8
-
-
-
+(nb_of_int, tabdata)=tab_int("largeGenerated.txt")
 
 class Individual:
     def __init__(self):
@@ -46,22 +41,7 @@ class Individual:
 class Population:
     def __init__(self,nb_of_people):
         self.ListOfIndividuals = [Individual() for i in range(nb_of_people)]
-import random
-import numpy as np
-import matplotlib.pyplot as plt
 
-def tab_int(nom_fichier):
-    fichier = open(nom_fichier, "r")
-    a=fichier.readline()
-    nb_of_int=int(a)
-    contenu = fichier.readlines()
-    fichier.close()
-    tab=contenu[0].split(", ")
-    for i in range(len(tab)):
-        tab[i]=int(tab[i])
-    return (nb_of_int,tab)
-
-(nb_of_int, tabdata)=tab_int("medium.txt")
 
 #trier le code genetic
 
@@ -100,10 +80,12 @@ def indice(int,indiv):
 
 def mutate(list):
     for a in list:
-
+        
+        nb_of_change=random.randint(1,len(a.gen_code)//100+1)
         if random.uniform(0.0,1.0)<=0.3:
-            n=random.randint(0,nb_of_int-1)
-            a.gen_code[n]=(a.gen_code[n]+1)%2
+            for i in range(nb_of_change):
+                n=random.randint(0,nb_of_int-1)
+                a.gen_code[n]=(a.gen_code[n]+1)%2
 #            a.gen_code[random.choice(indice(0,a))],a.gen_code[random.choice(indice(1,a))]=a.gen_code[random.choice(indice(1,a))],a.gen_code[random.choice(indice(0,a))]
             
 
@@ -117,7 +99,7 @@ def mutate(list):
 def fitness(List): #écart à 0
     for individual in   List:
         sum_nb=abs(sum(np.array(individual.gen_code)*np.array(tabdata)))
-        individual.fitness= 1/(1+sum_nb**1/2)*(sum(individual.gen_code)**2) #la fitness d'une liste qui fait pas 0 n'atteindra jamais plus de nb_of_int
+        individual.fitness= 1/(1+np.log(1+sum_nb**1/2))*(sum(individual.gen_code)**2) #la fitness d'une liste qui fait pas 0 n'atteindra jamais plus de nb_of_int
     return List
 
 
@@ -145,14 +127,14 @@ def ga():
     print("Choose your strategy : \n")
     strat = int(input('1 : 1 population, 400 generations (default strategy if unexpected input)\n2 : 2 populations, warring state\n3 : 2 populations, migration\n'))
     gen=0
-    nb_of_gen=400
+    nb_of_gen=800
     population1 = Population(100)
     population2 = Population(100)
     population1.ListOfIndividuals = fitness(population1.ListOfIndividuals)
     population1.ListOfIndividuals = select_individuals(population1.ListOfIndividuals)
 
     if strat==2 or strat==3:
-        nb_of_gen=200
+        nb_of_gen=400
         population2.ListOfIndividuals = fitness(population2.ListOfIndividuals)
         population2.ListOfIndividuals = select_individuals(population2.ListOfIndividuals)
     
@@ -227,7 +209,7 @@ def ga():
         plt.xlabel('Generation')
 
     plt.show()
-    print(best_sol.gen_code,sum(best_sol.gen_code),(abs(sum(np.array(best_sol.gen_code)*np.array(tabdata)))))
+    print(best_sol.gen_code,sum(best_sol.gen_code),(abs(sum(np.array(best_sol.gen_code)*np.array(tabdata)))),len(best_sol.gen_code))
     return best_sol.gen_code
 
 ga()
