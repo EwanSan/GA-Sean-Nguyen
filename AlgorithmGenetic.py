@@ -14,7 +14,7 @@ def tab_int(nom_fichier):
         tab[i]=int(tab[i])
     return (nb_of_int,tab)
 
-(nb_of_int, tabdata)=tab_int("largeGenerated.txt")
+(nb_of_int, tabdata)=tab_int("mediumRand.txt")
 
 class Individual:
     def __init__(self):
@@ -26,7 +26,7 @@ class Individual:
         
         
         
-        self.fitness=sum(self.gen_code)
+        self.fitness=0
         self.length=sum(self.gen_code)
         
         
@@ -72,10 +72,11 @@ def crossover_individuals(list):
 def mutate(list):
     for a in list:
         
-        nb_of_change=random.randint(1,len(a.gen_code)//100+1) #nombre de gene à changer entre 0 et 1% du code génétique
+        
         if random.uniform(0.0,1.0)<=0.3:
+            nb_of_change=random.randint(1,len(a.gen_code)//100+1) #nombre de gene à changer entre 0 et 1% du code génétique
             for i in range(nb_of_change):
-                n=random.randint(0,nb_of_int-1)
+                n=random.randint(0,nb_of_int-1) 
                 a.gen_code[n]=(a.gen_code[n]+1)%2   
 
     return list
@@ -88,7 +89,7 @@ def mutate(list):
 def fitness(List): 
     for individual in   List:
         sum_nb=abs(sum(np.array(individual.gen_code)*np.array(tabdata)))
-        individual.fitness= 1/(1+np.log(1+sum_nb**1/2))*(sum(individual.gen_code)**2) # log pour privilégier rapidement la convergence vers 0, et le carré pour la convergence quadratique vers la plus grande taille.
+        individual.fitness= 1/(1+np.log(1+sum_nb))*(sum(individual.gen_code)**2) # log pour privilégier rapidement la convergence vers 0, et le carré pour la convergence quadratique vers la plus grande taille.
     return List
 
 
@@ -114,16 +115,16 @@ def ga():
     best_sol=Individual()
     best_sol.fitness=0
     print("Choose your strategy : \n")
-    strat = int(input('1 : 1 population, 400 generations (default strategy if unexpected input)\n2 : 2 populations, warring state\n3 : 2 populations, migration\n'))
-    gen=0
-    nb_of_gen=800
+    strat = int(input('1 : 1 population, 400 generations (default strategy if unexpected input)\n2 : 2 populations, warring state\n3 : 2 populations, migration\n4 : 2 populations,independants\n'))
+    gen=1
+    nb_of_gen=400
     population1 = Population(100)
     population2 = Population(100)
     population1.ListOfIndividuals = fitness(population1.ListOfIndividuals)
     population1.ListOfIndividuals = select_individuals(population1.ListOfIndividuals)
 
-    if strat==2 or strat==3:
-        nb_of_gen=400
+    if strat==2 or strat==3 or strat==4:
+        nb_of_gen=200
         population2.ListOfIndividuals = fitness(population2.ListOfIndividuals)
         population2.ListOfIndividuals = select_individuals(population2.ListOfIndividuals)
     
@@ -144,7 +145,7 @@ def ga():
         X.append(gen)
         Y1.append(population1.ListOfIndividuals[0].fitness)
 
-        if strat==2 or strat==3:
+        if strat==2 or strat==3 or strat==4:
         
             population2.ListOfIndividuals= crossover_individuals(population2.ListOfIndividuals)#population2
             population2.ListOfIndividuals = mutate(population2.ListOfIndividuals)
@@ -160,7 +161,7 @@ def ga():
                 best_sol=population2.ListOfIndividuals[0]
                 print("New best solution found")
 
-            if gen%20==0:
+            if gen%25==0:
                 if strat == 2: #Warring method
                     if population1.ListOfIndividuals[0].fitness>population2.ListOfIndividuals[0].fitness: # comparing the best of both population
                         population1.ListOfIndividuals[-1]=population2.ListOfIndividuals[0] #prizoner add-on
@@ -173,7 +174,7 @@ def ga():
                         population1 = Population(100)
                         print("War")
                 
-                else: #Migration method
+                if strat==3: #Migration method
                     population1.ListOfIndividuals[-1]=population2.ListOfIndividuals[0] #Migration method
                     population1.ListOfIndividuals[-2]=population2.ListOfIndividuals[1]
                     population2.ListOfIndividuals[-1]=population1.ListOfIndividuals[0]
@@ -191,7 +192,7 @@ def ga():
     plt.ylabel('Fitness')
     plt.xlabel('Generation')
 
-    if strat==2 or strat==3:
+    if strat==2 or strat==3 or strat==4:
         plt.subplot(212)
         plt.plot(X,Y2)
         plt.ylabel('Fitness')
