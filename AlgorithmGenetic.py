@@ -66,28 +66,17 @@ def crossover_individuals(list):
         offsprings.append(child2)
     list=list+offsprings
     return list
-   # population.ListOfIndividuals.append(child)
 
-
-
-def indice(int,indiv):
-    L=[]
-    for i in range(nb_of_int):
-        if indiv.gen_code[i]==int:
-            L.append(i)
-    return L
 
 
 def mutate(list):
     for a in list:
         
-        nb_of_change=random.randint(1,len(a.gen_code)//100+1)
+        nb_of_change=random.randint(1,len(a.gen_code)//100+1) #nombre de gene à changer entre 0 et 1% du code génétique
         if random.uniform(0.0,1.0)<=0.3:
             for i in range(nb_of_change):
                 n=random.randint(0,nb_of_int-1)
-                a.gen_code[n]=(a.gen_code[n]+1)%2
-#            a.gen_code[random.choice(indice(0,a))],a.gen_code[random.choice(indice(1,a))]=a.gen_code[random.choice(indice(1,a))],a.gen_code[random.choice(indice(0,a))]
-            
+                a.gen_code[n]=(a.gen_code[n]+1)%2   
 
     return list
 
@@ -96,10 +85,10 @@ def mutate(list):
 
 
 
-def fitness(List): #écart à 0
+def fitness(List): 
     for individual in   List:
         sum_nb=abs(sum(np.array(individual.gen_code)*np.array(tabdata)))
-        individual.fitness= 1/(1+np.log(1+sum_nb**1/2))*(sum(individual.gen_code)**2) #la fitness d'une liste qui fait pas 0 n'atteindra jamais plus de nb_of_int
+        individual.fitness= 1/(1+np.log(1+sum_nb**1/2))*(sum(individual.gen_code)**2) # log pour privilégier rapidement la convergence vers 0, et le carré pour la convergence quadratique vers la plus grande taille.
     return List
 
 
