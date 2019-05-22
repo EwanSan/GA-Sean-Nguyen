@@ -13,9 +13,9 @@ OPTIMIZATIONS: Strategies involvings 2 interactings populations.
 
 
 How to use the files.
--Copy the txt files in the same folder as the .py file
--write the .txt filename in the .py file to use it
--execute the .py, input the strategy:
+- Copy the txt files in the same folder as the .py file
+- write the .txt filename in the .py file to use it
+- execute the .py, input the strategy:
 1- 1 population
 2- 2 populations: Warring states
 3- 2 populations : Migration
